@@ -46,29 +46,31 @@ public class Entropia {
 		for (int i = 1; i < czestotliowscSymboluPoSymbolu.length; i++) {
 			//System.out.println("Po symbolu i " + i + " występują: ");
 			 y = 0;
-			czestotliwoscYwTekscie =0;
+			czestotliwoscXwTekscie = 0;
+			
 			pi =0;
 			for (int j = 1; j < czestotliowscSymboluPoSymbolu.length; j++) {
 
 				
 				if (czestotliowscSymboluPoSymbolu[i][j] != 0) {
-				//	System.out.print("i: "+i+", j: "+j + " # = "
-				//			+ czestotliowscSymboluPoSymbolu[i][j] + "; ");
 					
-					 czestotliwoscYwTekscie = czestotliwoscSymbolu.get(j);
+					System.out.print("i: "+i+", j: "+j + " # = "
+							+ czestotliowscSymboluPoSymbolu[i][j] + "; ");
+					
+					 czestotliwoscXwTekscie = czestotliwoscSymbolu.get(i);
 				//	 System.out.println("# czestotliwoscYwTekscie " + czestotliwoscYwTekscie);
-					 pi = (float)czestotliowscSymboluPoSymbolu[i][j]/(float)czestotliwoscYwTekscie;
+					 pi = (float)czestotliowscSymboluPoSymbolu[i][j]/(float)czestotliwoscXwTekscie;
 					 infomracjaY  +=(float) ( pi*Math.log(1/pi));
-					// System.out.println("Entropia H(Y) = "+ infomracjaY);
+					System.out.println("Entropia H(Y) = "+ infomracjaY);
 				}
 				//infomracjaY  +=(float) ( pi*Math.log(1/pi));
 				//System.out.println("Entropia H(Y) = "+ infomracjaY);
 
 			}
 			if(infomracjaY!=0){
-				 czestotliwoscXwTekscie = czestotliwoscSymbolu.get(i);
+				// czestotliwoscXwTekscie = czestotliwoscSymbolu.get(i);
 				 int liczbaWszystkichWystapien = czestotliwoscSymbolu.size();
-				 entropia +=  (float)czestotliwoscXwTekscie/(float)liczbaWszystkichWystapien *(float)infomracjaY;
+				 entropia +=  ((float)czestotliwoscXwTekscie/(float)liczbaWszystkichWystapien) *(float)infomracjaY;
 			}
 			
 			infomracjaY =0;
