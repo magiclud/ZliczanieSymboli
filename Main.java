@@ -37,10 +37,10 @@ public class Main {
 		float etropia1 = entropia.entropiaDlaPojedynczychBajtow(
 				wczytaneBajty, czestotliwoscSymbolu);
 		System.out.println("Entropia dla pojedyńczych symboli: "+etropia1);
-		float entropiaWarunkowa = entropia.entropiaWarunkowana(czestotliowscSymboluPoSymbolu, czestotliwoscSymbolu);
+		double entropiaWarunkowa = entropia.entropiaWarunkowana(wczytaneBajty, czestotliowscSymboluPoSymbolu, czestotliwoscSymbolu);
 		System.out.println("Entopia warunkowana: "+entropiaWarunkowa);
 		
-		float roznicaEntropii = Math.abs(etropia1-entropiaWarunkowa);
+		double roznicaEntropii = Math.abs(etropia1-entropiaWarunkowa);
 		System.out.println("Różnica = "+roznicaEntropii);
 
 	}
