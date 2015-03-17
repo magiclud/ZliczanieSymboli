@@ -9,7 +9,7 @@ public class Entropia {
 	Entropia() {
 
 	}
-
+	
 	/*
 	 * Entropia dla pojedyńczych symboli: H = suma od i=1 do n(pi * log 1/pi),
 	 * pi = (#wystąpień symboli ai)/(#liczba wystąpień wszytskich symboli)

@@ -30,6 +30,33 @@ public class KodowanieHuffmanaStatyczne {
 		return zakodowanyTekst;
 	}
 
+	// This method assumes that the tree and dictionary are already built
+	public static String dekompresjaTekstuPrzyUzyciuSlownika(String zakodowanyTekst) {
+		String pom = new String();
+		String wynik = new String();
+
+		for (int i = 0; i < zakodowanyTekst.length(); i++) {
+			pom = pom + zakodowanyTekst.charAt(i);
+			if (slownik.containsValue(pom)) {
+				wynik = wynik + getZnakPrzypisanyDoKodu(slownik, pom);
+				pom = new String();
+			}
+		}
+
+		return wynik;
+	}
+
+	private static String getZnakPrzypisanyDoKodu(
+			HashMap<String, String> slownik2, String temp) {
+		for (String k : slownik.keySet()) {
+			if (slownik.get(k).equals(temp)) {
+				return k;
+			}
+		}
+		return null;
+
+	}
+
 	protected void wyswietlKodyZnakow(int i, ArrayList<Wezel> drzewoHuffmana,
 			String kod) {
 		// Wezel pierwszyE = drzewoHuffmana.get(0);

@@ -1,16 +1,51 @@
 package kodowanieH;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public class CzytanieZapisywaniePlikow {
 
+	private static int liczbaBitowPrzedKodowaniem;
+
 	protected static String czytanietekstuZPliku(String nazwaPliku) {
 
+		String wczytaneBajtyJakoString = wczytajStringZPliku(nazwaPliku);
+
+		String wczytanyTekst;
+		char[] nowa = new char[wczytaneBajtyJakoString.length() - 1];
+		if (wczytaneBajtyJakoString
+				.charAt(wczytaneBajtyJakoString.length() - 1) == '\n') {
+
+			wczytaneBajtyJakoString.getChars(0,
+					wczytaneBajtyJakoString.length() - 1, nowa, 0);
+			wczytanyTekst = String.valueOf(nowa);
+		} else {
+			wczytanyTekst = wczytaneBajtyJakoString;
+		}
+		// System.out.println("Liczba bitow przed kodowaniem = "+
+		// wczytanyTekst.length());
+		liczbaBitowPrzedKodowaniem = wczytanyTekst.length();
+
+		int resultLength = wczytanyTekst.length() / 8;
+		char[] result = new char[resultLength];
+		for (int i = 0; i < resultLength; i++) {
+			String sub = wczytanyTekst.substring(i * 8, (i + 1) * 8);
+			result[i] = (char) Integer.parseInt(sub, 2);
+		}
+		String tekst = new String(result);
+
+		return tekst;
+	}
+
+	protected static String wczytajStringZPliku(String nazwaPliku) {
 		File file = new File(nazwaPliku);
 		ByteArrayOutputStream byteArrayOutputStream = null;
 		InputStream inputStream = null;
@@ -41,29 +76,26 @@ public class CzytanieZapisywaniePlikow {
 			} catch (IOException e) {
 			}
 		}
+		return byteArrayOutputStream.toString();
+	}
 
-		String wczytaneBajtyJakoString = byteArrayOutputStream.toString();
-
-		String wczytanyTekst;
-		char[] nowa = new char[wczytaneBajtyJakoString.length() - 1];
-		if (wczytaneBajtyJakoString
-				.charAt(wczytaneBajtyJakoString.length() - 1) == '\n') {
-
-			wczytaneBajtyJakoString.getChars(0,
-					wczytaneBajtyJakoString.length() - 1, nowa, 0);
-			wczytanyTekst = String.valueOf(nowa);
-		} else {
-			wczytanyTekst = wczytaneBajtyJakoString;
+	protected static String zapisywanieTekstuDoPliku(String tekst) {
+		String nazwaPlikuWyjsciowego = "out.txt";
+		try {
+			File file = new File(nazwaPlikuWyjsciowego);
+			FileOutputStream fos = new FileOutputStream(file);
+			OutputStreamWriter osw = new OutputStreamWriter(fos);
+			Writer w = new BufferedWriter(osw);
+			w.write(tekst);
+			w.close();
+		} catch (IOException e) {
+			System.err.println("Problem z zapisem do pliku");
 		}
-		int resultLength = wczytanyTekst.length() / 8;
-		char[] result = new char[resultLength];
-		for (int i = 0; i < resultLength; i++) {
-			String sub = wczytanyTekst.substring(i * 8, (i + 1) * 8);
-			result[i] = (char) Integer.parseInt(sub, 2);
-		}
-		String tekst = new String(result);
+		return nazwaPlikuWyjsciowego;
+	}
 
-		return tekst;
+	public static int getLiczbaBitowPrzedKodowaniem() {
+		return liczbaBitowPrzedKodowaniem;
 	}
 
 }

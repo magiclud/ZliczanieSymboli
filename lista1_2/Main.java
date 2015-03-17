@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public class Main {
 
-	private static String nazwaPliku = "test1.txt";
+	private static String nazwaPliku = "PanTadeusz.txt";
 
 	public static void main(String[] args) {
 
