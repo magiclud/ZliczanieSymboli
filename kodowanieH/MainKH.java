@@ -1,36 +1,51 @@
 package kodowanieH;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import lista1_2.Czestotliwosc;
+
 public class MainKH {
 
 	public static void main(String[] args) {
 		// / 1. wczytuję tekst, 2. tworzę mapę 3.
 		ObliczeniaNaDanychZPliku obliczeniaNaDanychZPliku = new ObliczeniaNaDanychZPliku();
-		String nazwaPliku = "plik1Lista3.txt";
+	//	String nazwaPliku = "plik1Lista3.txt";
 
-		String wczytanytekst = CzytanieZapisywaniePlikow
-				.czytanietekstuZPliku(nazwaPliku);
-		System.out.println(wczytanytekst);
-
-		Map<String, Integer> czestotliwoscSymbolu = obliczeniaNaDanychZPliku
-				.zliczPowtarzajaceSieChary(wczytanytekst);
+		/**
+		 * dla inych plikow - zwyklych tekstowych 
+		 * 
+		 * **/
+		String nazwaPliku = "PanTadeusz.txt";
+		Czestotliwosc czestotliwosc = new Czestotliwosc(nazwaPliku);
+		File file =new File(nazwaPliku);
+		int[] wczytaneBajty = czestotliwosc.czestostliowscBajtowInnychPlikow(file);
+		czestotliwosc.zliczPowtarzajaceSieBajty(wczytaneBajty);
+		Map<String, Integer> czestotliwoscSymbolu = czestotliwosc.getAscii_LiczbaWyst();
+		String wczytanytekst =CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPliku) ;
+		/***/
+		
+//		String wczytanytekst = CzytanieZapisywaniePlikow
+//				.czytanietekstuZPliku(nazwaPliku);
+//
+//		Map<String, Integer> czestotliwoscSymbolu = obliczeniaNaDanychZPliku
+//				.zliczPowtarzajaceSieChary(wczytanytekst);
+		
+		
 		KodowanieHuffmanaStatyczne huffman = new KodowanieHuffmanaStatyczne();
-		System.out.println("Częstotliwość występowania symboli:");
-		wyswietlHashMape(czestotliwoscSymbolu);
-		System.out.println("______________________________");
-
+		//System.out.println("Częstotliwość występowania symboli:");
+		//wyswietlHashMape(czestotliwoscSymbolu);
 		ArrayList<Wezel> listaWezlow = huffman
 				.tworzPosortowanaListeWezlow(czestotliwoscSymbolu);
 		// wyswietlenie wezlow posortowanych
-		for (Wezel wezel : listaWezlow) {
-			System.out.println("Wezel " + wezel.getWartosc() + ", # = "
-					+ wezel.getCzestotliwosc());
-		}
+//		for (Wezel wezel : listaWezlow) {
+//			System.out.println("Wezel " + wezel.getWartosc() + ", # = "
+//					+ wezel.getCzestotliwosc());
+//		}
 		// //////////////////////////////////////
 
 		ArrayList<Wezel> drzewoHuffmana = huffman
@@ -40,23 +55,25 @@ public class MainKH {
 		Wezel korzen = drzewoHuffmana.get(0);
 		// tworzenie tabel do kodowania i odkodowania - slownik
 		huffman.zbudujTabeleKodow(korzen);
-		System.out.println("Wyswietl slownik");
+		
 		HashMap<String, String> slownik = KodowanieHuffmanaStatyczne.getSlownik();
-		wyswietlHashMape(slownik);
+		//System.out.println("Wyswietl slownik");
+		//wyswietlHashMape(slownik);
 
-		String zakodowanyT = huffman.zakodujTekst(wczytanytekst);
+		StringBuilder zakodowanyT = huffman.zakodujTekst(wczytanytekst);
 		System.out.println("Tekst zakodowany na  " + zakodowanyT.length()
 				+ " bitach");
-		System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
-		
+		//System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
+	
 		//zapisz do pliku zakodowany tekst
 		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisywanieTekstuDoPliku(zakodowanyT);
 
 		//deszyfrowane tekstu z pliku przy uzycia slownika 
-		String wczytanyZaszyfrowanyTekst = CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPlikuWyjsciowego);
-		String odszyfrownyTekst = huffman.dekompresjaTekstuPrzyUzyciuSlownika(wczytanyZaszyfrowanyTekst);
+		StringBuilder sb = new StringBuilder();
+		sb.append(CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPlikuWyjsciowego));
+		StringBuilder odszyfrownyTekst = KodowanieHuffmanaStatyczne.dekompresjaTekstuPrzyUzyciuSlownika(sb);
         System.out.println("Oryginalny tekst składał się z " + odszyfrownyTekst.length() + " znaków");
-        System.out.println(odszyfrownyTekst);
+       // System.out.println(odszyfrownyTekst);
  
 		
 		

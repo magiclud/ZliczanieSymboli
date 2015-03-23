@@ -18,31 +18,39 @@ public class KodowanieHuffmanaStatyczne {
 	private static HashMap<String, String> codeToChar;
 
 	// This method assumes that the tree and dictionary are already built
-	protected String zakodujTekst(String tekstDoZakodowania) {
+	protected StringBuilder zakodujTekst(String tekstDoZakodowania) {
 		// TODO !!! najpierw zrob na kartceS
-		String zakodowanyTekst = new String();
+		StringBuilder s = new StringBuilder();
+	//	String zakodowanyTekst = new String();
 
 		for (int i = 0; i < tekstDoZakodowania.length(); i++) {
 			String pom = String.valueOf(tekstDoZakodowania.charAt(i));
-			zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
+			s.append(slownik.get(pom));
+		//	zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
 		}
-
-		return zakodowanyTekst;
+return s;
+		//return zakodowanyTekst;
 	}
 
 	// This method assumes that the tree and dictionary are already built
-	public static String dekompresjaTekstuPrzyUzyciuSlownika(String zakodowanyTekst) {
+	public static StringBuilder dekompresjaTekstuPrzyUzyciuSlownika(StringBuilder zakodowanyTekst) {
 		String pom = new String();
-		String wynik = new String();
+		StringBuilder wynik = new StringBuilder();
 
-		for (int i = 0; i < zakodowanyTekst.length(); i++) {
-			pom = pom + zakodowanyTekst.charAt(i);
+		for (long i = 0; i < zakodowanyTekst.length(); i++) {
+			pom += zakodowanyTekst.charAt((int) i);
 			if (slownik.containsValue(pom)) {
-				wynik = wynik + getZnakPrzypisanyDoKodu(slownik, pom);
+				if(getZnakPrzypisanyDoKodu(slownik, pom).equals(null)){
+					System.out.println("Byl null!!");
+				}
+				wynik.append(getZnakPrzypisanyDoKodu(slownik, pom));
 				pom = new String();
 			}
+			if(i == zakodowanyTekst.length() -1 ){
+				System.out.println("Prawie Koniec");
+			}
 		}
-
+		System.out.println(wynik.length());
 		return wynik;
 	}
 

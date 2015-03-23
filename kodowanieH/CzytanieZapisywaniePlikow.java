@@ -1,5 +1,6 @@
 package kodowanieH;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,7 +19,7 @@ public class CzytanieZapisywaniePlikow {
 	protected static String czytanietekstuZPliku(String nazwaPliku) {
 
 		String wczytaneBajtyJakoString = wczytajStringZPliku(nazwaPliku);
-
+System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 		String wczytanyTekst;
 		char[] nowa = new char[wczytaneBajtyJakoString.length() - 1];
 		if (wczytaneBajtyJakoString
@@ -57,6 +58,7 @@ public class CzytanieZapisywaniePlikow {
 			while ((read = inputStream.read(readedBytes)) != -1) {
 				byteArrayOutputStream.write(readedBytes, 0, read);
 			}
+			System.out.println("WWWWWWWWWWWWWW: "+ readedBytes.length);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,23 +81,82 @@ public class CzytanieZapisywaniePlikow {
 		return byteArrayOutputStream.toString();
 	}
 
-	protected static String zapisywanieTekstuDoPliku(String tekst) {
+	protected static String zapisywanieTekstuDoPliku(StringBuilder tekst) {
 		String nazwaPlikuWyjsciowego = "out.txt";
 		try {
 			File file = new File(nazwaPlikuWyjsciowego);
 			FileOutputStream fos = new FileOutputStream(file);
-			OutputStreamWriter osw = new OutputStreamWriter(fos);
-			Writer w = new BufferedWriter(osw);
-			w.write(tekst);
-			w.close();
+//			OutputStreamWriter osw = new OutputStreamWriter(fos);
+//			Writer w = new BufferedWriter(osw);
+//			w.append(tekst);
+//			w.close();
+			
+			
+			OutputStreamWriter writer = new OutputStreamWriter(
+			        new BufferedOutputStream(fos), "utf-8");
+
+			for (int i = 0; i < tekst.length(); i++) {
+			    writer.write(tekst.charAt(i));
+			}
+			writer.flush();
+			writer.close();
+			fos.close();
 		} catch (IOException e) {
 			System.err.println("Problem z zapisem do pliku");
 		}
 		return nazwaPlikuWyjsciowego;
-	}
+
+}
 
 	public static int getLiczbaBitowPrzedKodowaniem() {
 		return liczbaBitowPrzedKodowaniem;
 	}
 
+	public int[] czestostliowscBajtowInnychPlikow(File file) {
+
+		ByteArrayOutputStream byteArrayOutputStream = null;
+		InputStream inputStream = null;
+		try {
+			byte[] readedBytes = new byte[(int) file.length()];
+			byteArrayOutputStream = new ByteArrayOutputStream();
+			inputStream = new FileInputStream(file);
+			int read = 0;
+			while ((read = inputStream.read(readedBytes)) != -1) {
+				byteArrayOutputStream.write(readedBytes, 0, read);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (byteArrayOutputStream != null)
+					byteArrayOutputStream.close();
+			} catch (IOException e) {
+			}
+
+			try {
+				if (inputStream != null)
+					inputStream.close();
+			} catch (IOException e) {
+			}
+		}
+		int[] wczytaneBajty = zamienUjemneNaDodatnie(byteArrayOutputStream
+				.toByteArray());
+		return wczytaneBajty;
+	}
+	private int[] zamienUjemneNaDodatnie(byte[] byteArray) {
+		int[] wczytaneBajty = new int[byteArray.length];
+		for (int i = 0; i < byteArray.length; i++) {
+			if (byteArray[i] < 0) {
+				wczytaneBajty[i] = 256 + byteArray[i];
+			} else {
+				wczytaneBajty[i] = byteArray[i];
+			}
+
+		}
+		return wczytaneBajty;
+	}
 }
