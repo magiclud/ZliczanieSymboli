@@ -86,7 +86,12 @@ public class MainKH {
 //		StringBuilder zakodowanyT = huffman.zakodujTekst(wczytanytekst); //TODO odkomentuj
 		StringBuilder zakodowanyT = huffman.zakodujTekstByte(wczytaneBajtyZPliku); //TODO zakomentuj dla pliku z zadania
 		System.out.println("Tekst zakodowany na  " + zakodowanyT.length()
-				+ " bitach");
+				+ " bajtach");
+		byte[] skompresowanyTekst = huffman.kompresuj(zakodowanyT);
+		System.out.println("Tekst skompresowany na  " + skompresowanyTekst.length
+				+ " bajtach");
+		
+		
 //		System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
 	
 //		//zapisz do pliku zakodowany tekst

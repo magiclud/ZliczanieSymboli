@@ -16,6 +16,7 @@ public class KodowanieHuffmanaStatyczne {
 
 	private static HashMap<Byte, String> slownik;
 	private static HashMap<String, Byte> codeToChar;
+	private static int dlTekstuZakodowanego=0;
 
 	// This method assumes that the tree and dictionary are already built
 	protected StringBuilder zakodujTekst(String tekstDoZakodowania) {
@@ -117,7 +118,7 @@ public class KodowanieHuffmanaStatyczne {
 					+ drugiEl.getCzestotliwosc();
 			// tworze nowy Wezel
 			nowyWezel.setCzestotliwosc(nowaCzestotliwosc);
-			nowyWezel.setWartosc(Byte.valueOf(-1+""));
+			// nowyWezel.setWartosc(Byte.valueOf(-1 + ""));
 
 			listaWezlow.add(nowyWezel);
 
@@ -143,7 +144,7 @@ public class KodowanieHuffmanaStatyczne {
 		postorder(n.getPrawyPotomek(), s + "1");
 
 		byte wartosc = n.getWartosc();
-		if (wartosc != Byte.valueOf(-1+"")) {
+		if (wartosc != 0) {
 			// tylko gdy w lisciu sa waertosci (litery)
 			System.out.println("\'" + wartosc + "\' -> " + s);
 			slownik.put(wartosc, s);
@@ -205,6 +206,44 @@ public class KodowanieHuffmanaStatyczne {
 		}
 		listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
 		return listaWezlow;
+	}
+
+	public byte[] kompresuj(StringBuilder zakodowanyT) {
+		StringBuilder tekstDoKompresji = new StringBuilder();
+		tekstDoKompresji = zakodowanyT;
+		byte[] resultByte;
+		int[] result;
+		
+		int resultLength = tekstDoKompresji.length() / 8;
+		int resultModulo = tekstDoKompresji.length() % 8;
+		
+		if (resultModulo != 0) {
+			resultLength +=1;
+			resultByte = new byte[resultLength];
+			result = new int[resultLength];
+			for (int i = 0; i < resultLength; i++) {
+				if(i == resultLength-1){
+					for(int j=resultModulo; j<8; j++){
+						tekstDoKompresji.append("0");
+					}
+				}
+				String sub = tekstDoKompresji.substring(i * 8, (i + 1) * 8);
+				// System.out.println(" "+ sub);
+
+				result[i] = (char) Integer.parseInt(sub, 2);
+				resultByte[i] = (byte) result[i];
+			}
+		} else {
+			resultByte = new byte[resultLength];
+			 result = new int[resultLength];
+			for (int i = 0; i < resultLength; i++) {
+				String sub = tekstDoKompresji.substring(i * 8, (i + 1) * 8);
+				result[i] = (char) Integer.parseInt(sub, 2);
+				resultByte[i] = (byte) result[i];
+			}
+		}
+		dlTekstuZakodowanego = resultLength;
+		return resultByte;
 	}
 
 }
