@@ -2,13 +2,13 @@ package kodowanieH;
 
 public class Wezel {
 
-	private String wartosc;
+	private byte wartoscByte;
 	private int czestotliwosc;
 	private Wezel lewyPotomek;
 	private Wezel prawyPotomek;
 
-	public Wezel(String wartosc, int czestotliwosc) {
-		this.wartosc = wartosc;
+	public Wezel(byte wartosc, int czestotliwosc) {
+		this.wartoscByte = wartosc;
 		this.czestotliwosc = czestotliwosc;
 		this.lewyPotomek = null;
 		this.prawyPotomek = null;
@@ -27,8 +27,8 @@ public class Wezel {
 //		System.out.println("[");
 //	}
 
-	public void setWartosc(String wartosc) {
-		this.wartosc = wartosc;
+	public void setWartosc(byte wartosc) {
+		this.wartoscByte = wartosc;
 	}
 	public void setCzestotliwosc(int czestotliwosc) {
 		this.czestotliwosc = czestotliwosc;
@@ -41,8 +41,8 @@ public class Wezel {
 	public void setPrawyPotomek(Wezel prawyPotomek) {
 		this.prawyPotomek = prawyPotomek;
 	}
-	public String getWartosc() {
-		return wartosc;
+	public byte getWartosc() {
+		return wartoscByte;
 	}
 
 	public int getCzestotliwosc() {

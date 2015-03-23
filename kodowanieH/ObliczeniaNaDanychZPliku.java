@@ -26,15 +26,15 @@ public class ObliczeniaNaDanychZPliku {
 	 * pi = (#wystąpień symboli ai)/(#liczba wystąpień wszytskich symboli)
 	 */
 	public double entropiaDlaPojedynczychBajtow(String wczytanyTekst,
-			Map<String, Integer> czestotliwoscSymbolu) {
+			Map<Integer, Integer> czestotliwoscSymbolu) {
 		System.out.println("# wszystkich symboli: " + wczytanyTekst.length());
 
 		// Print the content of the hashMap
-		Set<Entry<String, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
+		Set<Entry<Integer, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
 		for (int i = 0; i < wczytanyTekst.length(); i++) {
 		}
 		double entropia = 0;
-		for (Entry<String, Integer> entry : hashSet) {
+		for (Entry<Integer, Integer> entry : hashSet) {
 			double waga = (int) entry.getValue()
 					/ (double) wczytanyTekst.length();
 			entropia += waga * Math.log(1 / waga);
@@ -44,10 +44,10 @@ public class ObliczeniaNaDanychZPliku {
 		return entropia;
 	}
 
-	public int wyznaczSreniaDlugoscKodowania(Map<String, Integer> czestotliwoscSymbolu, HashMap<String, String> slownik) {
+	public int wyznaczSreniaDlugoscKodowania(Map<Integer, Integer> czestotliwoscSymbolu, HashMap<Integer, String> slownik) {
 
 		int sredniaDlKodowania =0;
-		Set<Entry<String, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
+		Set<Entry<Integer, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
 		for (Entry entry : hashSet) {
 			// czestotliwosc(symbolu)* dlugosc kodu symbolu
 //			System.out.println("Key=" + entry.getKey() + ", Value="

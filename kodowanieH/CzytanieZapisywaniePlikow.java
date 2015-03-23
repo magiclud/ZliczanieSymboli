@@ -11,15 +11,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CzytanieZapisywaniePlikow {
 
 	private static int liczbaBitowPrzedKodowaniem;
+	
 
 	protected static String czytanietekstuZPliku(String nazwaPliku) {
 
 		String wczytaneBajtyJakoString = wczytajStringZPliku(nazwaPliku);
-System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
+		System.out
+				.println("wczytaneBajtyJakoString " + wczytaneBajtyJakoString);
 		String wczytanyTekst;
 		char[] nowa = new char[wczytaneBajtyJakoString.length() - 1];
 		if (wczytaneBajtyJakoString
@@ -31,8 +35,8 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 		} else {
 			wczytanyTekst = wczytaneBajtyJakoString;
 		}
-//		 System.out.println("Liczba bitow przed kodowaniem = "+
-//		 wczytanyTekst.length());
+		// System.out.println("Liczba bitow przed kodowaniem = "+
+		// wczytanyTekst.length());
 		liczbaBitowPrzedKodowaniem = wczytanyTekst.length();
 
 		int resultLength = wczytanyTekst.length() / 8;
@@ -58,7 +62,6 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 			while ((read = inputStream.read(readedBytes)) != -1) {
 				byteArrayOutputStream.write(readedBytes, 0, read);
 			}
-			System.out.println("WWWWWWWWWWWWWW: "+ readedBytes.length);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,17 +89,16 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 		try {
 			File file = new File(nazwaPlikuWyjsciowego);
 			FileOutputStream fos = new FileOutputStream(file);
-//			OutputStreamWriter osw = new OutputStreamWriter(fos);
-//			Writer w = new BufferedWriter(osw);
-//			w.append(tekst);
-//			w.close();
-			
-			
+			// OutputStreamWriter osw = new OutputStreamWriter(fos);
+			// Writer w = new BufferedWriter(osw);
+			// w.append(tekst);
+			// w.close();
+
 			OutputStreamWriter writer = new OutputStreamWriter(
-			        new BufferedOutputStream(fos), "utf-8");
+					new BufferedOutputStream(fos), "utf-8");
 
 			for (int i = 0; i < tekst.length(); i++) {
-			    writer.write(tekst.charAt(i));
+				writer.write(tekst.charAt(i));
 			}
 			writer.flush();
 			writer.close();
@@ -106,7 +108,7 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 		}
 		return nazwaPlikuWyjsciowego;
 
-}
+	}
 
 	public static int getLiczbaBitowPrzedKodowaniem() {
 		return liczbaBitowPrzedKodowaniem;
@@ -147,6 +149,7 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 				.toByteArray());
 		return wczytaneBajty;
 	}
+
 	private int[] zamienUjemneNaDodatnie(byte[] byteArray) {
 		int[] wczytaneBajty = new int[byteArray.length];
 		for (int i = 0; i < byteArray.length; i++) {
@@ -158,5 +161,57 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 
 		}
 		return wczytaneBajty;
+	}
+
+	public static byte[] czytanieBajtowZPliku(String nazwaPliku) {
+		File file = new File(nazwaPliku);
+
+		ByteArrayOutputStream byteArrayOutputStream = null;
+		InputStream inputStream = null;
+		byte[] readedBytes = null;
+		try {
+			readedBytes = new byte[(int) file.length()];
+			byteArrayOutputStream = new ByteArrayOutputStream();
+			inputStream = new FileInputStream(file);
+			int read = 0;
+			while ((read = inputStream.read(readedBytes)) != -1) {
+				byteArrayOutputStream.write(readedBytes, 0, read);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (byteArrayOutputStream != null)
+					byteArrayOutputStream.close();
+			} catch (IOException e) {
+			}
+
+			try {
+				if (inputStream != null)
+					inputStream.close();
+			} catch (IOException e) {
+			}
+		}
+
+		return readedBytes;
+
+	}
+	
+	public static Map<Byte, Integer> zliczPowtarzajaceSieBajty(byte[] wcztaneBajty) {
+		Map<Byte, Integer> bajt_LiczbaWyst = new HashMap<Byte, Integer>();
+
+		for (byte x : wcztaneBajty) {// wczytuje po bajcie
+			// System.out.println("Readed byte: " + readedByte);
+			if (!bajt_LiczbaWyst.isEmpty() && bajt_LiczbaWyst.containsKey(x)) {
+				bajt_LiczbaWyst.put(x, bajt_LiczbaWyst.get(x) + 1);
+			} else {
+				bajt_LiczbaWyst.put(x, 1);
+			}
+		}
+		return bajt_LiczbaWyst;
 	}
 }

@@ -15,6 +15,7 @@ public class MainKH {
 		int liczbaBitowPrzedKodowaniem=0;
 		// / 1. wczytuję tekst, 2. tworzę mapę 3.
 		ObliczeniaNaDanychZPliku obliczeniaNaDanychZPliku = new ObliczeniaNaDanychZPliku();
+		KodowanieHuffmanaStatyczne huffman = new KodowanieHuffmanaStatyczne();
 	//	String nazwaPliku = "plik1Lista3.txt";
 
 		/**
@@ -22,15 +23,34 @@ public class MainKH {
 		 * 
 		 * **/
 		String nazwaPliku = "PanTadeusz.txt";
+	//	String nazwaPliku = "test1.txt";
 		Czestotliwosc czestotliwosc = new Czestotliwosc(nazwaPliku);
 		File file =new File(nazwaPliku);
 		int[] wczytaneBajty = czestotliwosc.czestostliowscBajtowInnychPlikow(file);
 		czestotliwosc.zliczPowtarzajaceSieBajty(wczytaneBajty);
-		Map<String, Integer> czestotliwoscSymbolu = czestotliwosc.getAscii_LiczbaWyst();
-		String wczytanytekst =CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPliku) ;
-		liczbaBitowPrzedKodowaniem = wczytanytekst.length();
+		Map<Integer, Integer> czestotliwoscSymbolu = czestotliwosc.getBajt_LiczbaWyst();
+//		String wczytanytekst =CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPliku) ;
+//		liczbaBitowPrzedKodowaniem = wczytanytekst.length();
 		/***/
+		// 1. wczytuje bajty z pliku 
+		byte[] wczytaneBajtyZPliku = CzytanieZapisywaniePlikow.czytanieBajtowZPliku(nazwaPliku);
+		Map<Byte, Integer> czestotliwoscBytow=CzytanieZapisywaniePlikow.zliczPowtarzajaceSieBajty(wczytaneBajtyZPliku);
+		////////////// end 1.
+		// 2. tworz wezly - posortowane
+		ArrayList<Wezel> listaWezlow = huffman
+				.tworzPosortowanaListeBytow(czestotliwoscBytow);
+		// wyswietlenie wezlow posortowanych
+		for (Wezel wezel : listaWezlow) {
+			System.out.println("Wezel " + wezel.getWartosc() + ", # = "
+					+ wezel.getCzestotliwosc());
+		}
+		//////////////end 2. 
+		// 3. tworz drzewo Huff
 		
+		
+		
+		
+		/*****/
 //		String wczytanytekst = CzytanieZapisywaniePlikow
 //				.czytanietekstuZPliku(nazwaPliku);
 //liczbaBitowPrzedKodowaniem = CzytanieZapisywaniePlikow.getLiczbaBitowPrzedKodowaniem();
@@ -38,11 +58,12 @@ public class MainKH {
 //				.zliczPowtarzajaceSieChary(wczytanytekst);
 		
 		
-		KodowanieHuffmanaStatyczne huffman = new KodowanieHuffmanaStatyczne();
-		//System.out.println("Częstotliwość występowania symboli:");
+		
+//		 System.out.println("Częstotliwość występowania symboli:");
+		
 		//wyswietlHashMape(czestotliwoscSymbolu);
-		ArrayList<Wezel> listaWezlow = huffman
-				.tworzPosortowanaListeWezlow(czestotliwoscSymbolu);
+//		ArrayList<Wezel> listaWezlow = huffman
+//				.tworzPosortowanaListeWezlow(czestotliwoscSymbolu);
 		// wyswietlenie wezlow posortowanych
 //		for (Wezel wezel : listaWezlow) {
 //			System.out.println("Wezel " + wezel.getWartosc() + ", # = "
@@ -58,36 +79,37 @@ public class MainKH {
 		// tworzenie tabel do kodowania i odkodowania - slownik
 		huffman.zbudujTabeleKodow(korzen);
 		
-		HashMap<String, String> slownik = KodowanieHuffmanaStatyczne.getSlownik();
-		//System.out.println("Wyswietl slownik");
-		//wyswietlHashMape(slownik);
+		HashMap<Byte, String> slownik = KodowanieHuffmanaStatyczne.getSlownik();
+		System.out.println("Wyswietl slownik");
+		wyswietlHashMape(slownik);
 
-		StringBuilder zakodowanyT = huffman.zakodujTekst(wczytanytekst);
+//		StringBuilder zakodowanyT = huffman.zakodujTekst(wczytanytekst); //TODO odkomentuj
+		StringBuilder zakodowanyT = huffman.zakodujTekstByte(wczytaneBajtyZPliku); //TODO zakomentuj dla pliku z zadania
 		System.out.println("Tekst zakodowany na  " + zakodowanyT.length()
 				+ " bitach");
-		//System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
+//		System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
 	
-		//zapisz do pliku zakodowany tekst
-		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisywanieTekstuDoPliku(zakodowanyT);
-
-		//deszyfrowane tekstu z pliku przy uzycia slownika 
-		StringBuilder sb = new StringBuilder();
-		sb.append(CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPlikuWyjsciowego));
-		StringBuilder odszyfrownyTekst = KodowanieHuffmanaStatyczne.dekompresjaTekstuPrzyUzyciuSlownika(sb);
-        System.out.println("Oryginalny tekst składał się z " + odszyfrownyTekst.length() + " znaków");
-       // System.out.println(odszyfrownyTekst);
- 
-		
-		
-		// wyznacz entropie kodowania // wynik przy poprzednim zadaniu dla tych danych1.9722469794234414
-        double entropia = obliczeniaNaDanychZPliku.entropiaDlaPojedynczychBajtow(wczytanytekst, czestotliwoscSymbolu);
-        System.out.println(entropia);
-		//srednia dlugosc kodowania
-       int srDlKodowania =  obliczeniaNaDanychZPliku.wyznaczSreniaDlugoscKodowania(czestotliwoscSymbolu,slownik);
-       System.out.println("Srednia dl. kodowania = "+ srDlKodowania);
-		//stopien kompresji
-      double stKompresji =  obliczeniaNaDanychZPliku.wyznaczStopienKompresji(liczbaBitowPrzedKodowaniem, zakodowanyT.length());
-       System.out.println("Stopien kompresji = "+stKompresji );
+//		//zapisz do pliku zakodowany tekst
+//		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisywanieTekstuDoPliku(zakodowanyT);
+//
+//		//deszyfrowane tekstu z pliku przy uzycia slownika 
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPlikuWyjsciowego));
+//		StringBuilder odszyfrownyTekst = KodowanieHuffmanaStatyczne.dekompresjaTekstuPrzyUzyciuSlownika(sb);
+//        System.out.println("Oryginalny tekst składał się z " + odszyfrownyTekst.length() + " znaków");
+//       // System.out.println(odszyfrownyTekst);
+// 
+//		
+//		
+//		// wyznacz entropie kodowania // wynik przy poprzednim zadaniu dla tych danych1.9722469794234414
+//        double entropia = obliczeniaNaDanychZPliku.entropiaDlaPojedynczychBajtow(wczytanytekst, czestotliwoscSymbolu);
+//        System.out.println(entropia);
+//		//srednia dlugosc kodowania
+//       int srDlKodowania =  obliczeniaNaDanychZPliku.wyznaczSreniaDlugoscKodowania(czestotliwoscSymbolu,slownik);
+//       System.out.println("Srednia dl. kodowania = "+ srDlKodowania);
+//		//stopien kompresji
+//      double stKompresji =  obliczeniaNaDanychZPliku.wyznaczStopienKompresji(liczbaBitowPrzedKodowaniem, zakodowanyT.length());
+//       System.out.println("Stopien kompresji = "+stKompresji );
 	}
 
 	public static void wyswietlHashMape(Map result) {

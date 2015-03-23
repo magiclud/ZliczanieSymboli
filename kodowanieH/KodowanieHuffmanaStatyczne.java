@@ -14,54 +14,51 @@ import java.util.Map.Entry;
 
 public class KodowanieHuffmanaStatyczne {
 
-	private static HashMap<String, String> slownik;
-	private static HashMap<String, String> codeToChar;
+	private static HashMap<Byte, String> slownik;
+	private static HashMap<String, Byte> codeToChar;
 
 	// This method assumes that the tree and dictionary are already built
 	protected StringBuilder zakodujTekst(String tekstDoZakodowania) {
-		// TODO !!! najpierw zrob na kartceS
 		StringBuilder s = new StringBuilder();
-	//	String zakodowanyTekst = new String();
+		// String zakodowanyTekst = new String();
 
 		for (int i = 0; i < tekstDoZakodowania.length(); i++) {
 			String pom = String.valueOf(tekstDoZakodowania.charAt(i));
 			s.append(slownik.get(pom));
-		//	zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
+			// zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
 		}
-return s;
-		//return zakodowanyTekst;
+		return s;
+		// return zakodowanyTekst;
 	}
 
 	// This method assumes that the tree and dictionary are already built
-	public static StringBuilder dekompresjaTekstuPrzyUzyciuSlownika(StringBuilder zakodowanyTekst) {
+	public static StringBuilder dekompresjaTekstuPrzyUzyciuSlownika(
+			StringBuilder zakodowanyTekst) {
 		String pom = new String();
 		StringBuilder wynik = new StringBuilder();
 
 		for (long i = 0; i < zakodowanyTekst.length(); i++) {
 			pom += zakodowanyTekst.charAt((int) i);
 			if (slownik.containsValue(pom)) {
-				if(getZnakPrzypisanyDoKodu( pom).equals(null)){
+				if (getZnakPrzypisanyDoKodu(pom) == -1) {
 					System.out.println("Byl null!!");
 				}
-				wynik.append(getZnakPrzypisanyDoKodu( pom));
+				// System.out.println("it: "+ i+", wynik "+ wynik);
+				wynik.append(getZnakPrzypisanyDoKodu(pom));
 				pom = new String();
-			}
-			if(i == zakodowanyTekst.length() -1 ){
-				System.out.println("Prawie Koniec");
 			}
 		}
 		System.out.println(wynik.length());
 		return wynik;
 	}
 
-	private static String getZnakPrzypisanyDoKodu( String temp) {
-		for (String k : slownik.keySet()) {
+	private static int getZnakPrzypisanyDoKodu(String temp) {
+		for (Byte k : slownik.keySet()) {
 			if (slownik.get(k).equals(temp)) {
 				return k;
 			}
 		}
-		System.out.println("BYLEM NULL");
-		return null;
+		return -1;
 
 	}
 
@@ -82,16 +79,16 @@ return s;
 		}
 	}
 
-	protected ArrayList<Wezel> tworzPosortowanaListeWezlow(
-			Map<String, Integer> czestotliwoscSymbolu) {
-		ArrayList<Wezel> listaWezlow = new ArrayList<Wezel>();
-		Set<Entry<String, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
-		for (Entry<String, Integer> entry : hashSet) {
-			listaWezlow.add(new Wezel(entry.getKey(), entry.getValue()));
-		}
-		listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
-		return listaWezlow;
-	}
+	// protected ArrayList<Wezel> tworzPosortowanaListeWezlow(
+	// Map<Integer, Integer> czestotliwoscSymbolu) {
+	// ArrayList<Wezel> listaWezlow = new ArrayList<Wezel>();
+	// Set<Entry<Integer, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
+	// for (Entry<Integer, Integer> entry : hashSet) {
+	// listaWezlow.add(new Wezel(entry.getKey(), entry.getValue()));
+	// }
+	// listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
+	// return listaWezlow;
+	// }
 
 	protected ArrayList<Wezel> sortowanieElementowWLiscieWezlow(
 			ArrayList<Wezel> listaW) {
@@ -116,11 +113,11 @@ return s;
 			nowyWezel.setPrawyPotomek(drugiEl);
 			listaWezlow.remove(0);
 
-			int nowyCzestotliwosc = pierwszyEl.getCzestotliwosc()
+			int nowaCzestotliwosc = pierwszyEl.getCzestotliwosc()
 					+ drugiEl.getCzestotliwosc();
 			// tworze nowy Wezel
-			nowyWezel.setCzestotliwosc(nowyCzestotliwosc);
-			nowyWezel.setWartosc(null);
+			nowyWezel.setCzestotliwosc(nowaCzestotliwosc);
+			nowyWezel.setWartosc(Byte.valueOf(-1+""));
 
 			listaWezlow.add(nowyWezel);
 
@@ -131,8 +128,8 @@ return s;
 
 	// Stwórz slownik(tablice) do zakodowania i odkodowania
 	protected void zbudujTabeleKodow(Wezel root) {
-		slownik = new HashMap<String, String>();
-		codeToChar = new HashMap<String, String>();
+		slownik = new HashMap<Byte, String>();
+		codeToChar = new HashMap<String, Byte>();
 
 		postorder(root, new String());
 	}
@@ -145,8 +142,8 @@ return s;
 		postorder(n.getLewyPotomek(), s + "0");
 		postorder(n.getPrawyPotomek(), s + "1");
 
-		String wartosc = n.getWartosc();
-		if (wartosc != null) {
+		byte wartosc = n.getWartosc();
+		if (wartosc != Byte.valueOf(-1+"")) {
 			// tylko gdy w lisciu sa waertosci (litery)
 			System.out.println("\'" + wartosc + "\' -> " + s);
 			slownik.put(wartosc, s);
@@ -181,8 +178,33 @@ return s;
 		return result;
 	}
 
-	public static HashMap<String, String> getSlownik() {
+	public static HashMap<Byte, String> getSlownik() {
 		return slownik;
+	}
+
+	public StringBuilder zakodujTekstByte(byte[] wczytaneBajtyZPliku) {
+		StringBuilder s = new StringBuilder();
+		// String zakodowanyTekst = new String();
+
+		for (int i = 0; i < wczytaneBajtyZPliku.length; i++) {
+			byte pom = wczytaneBajtyZPliku[i];
+			s.append(slownik.get(pom));
+			// zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
+		}
+		return s;
+		// return zakodowanyTekst;
+	}
+
+	public ArrayList<Wezel> tworzPosortowanaListeBytow(
+			Map<Byte, Integer> czestotliwoscBytow) {
+
+		ArrayList<Wezel> listaWezlow = new ArrayList<Wezel>();
+		Set<Entry<Byte, Integer>> hashSet = czestotliwoscBytow.entrySet();
+		for (Entry<Byte, Integer> entry : hashSet) {
+			listaWezlow.add(new Wezel(entry.getKey(), entry.getValue()));
+		}
+		listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
+		return listaWezlow;
 	}
 
 }
