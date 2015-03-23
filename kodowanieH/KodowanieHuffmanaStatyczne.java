@@ -37,13 +37,13 @@ return s;
 		String pom = new String();
 		StringBuilder wynik = new StringBuilder();
 
-		for (long i = 0; i < zakodowanyTekst.length(); i++) {
+		for (long i = 0; i < zakodowanyTekst.length()/10000; i++) {
 			pom += zakodowanyTekst.charAt((int) i);
 			if (slownik.containsValue(pom)) {
-				if(getZnakPrzypisanyDoKodu(slownik, pom).equals(null)){
+				if(getZnakPrzypisanyDoKodu( pom).equals(null)){
 					System.out.println("Byl null!!");
 				}
-				wynik.append(getZnakPrzypisanyDoKodu(slownik, pom));
+				wynik.append(getZnakPrzypisanyDoKodu( pom));
 				pom = new String();
 			}
 			if(i == zakodowanyTekst.length() -1 ){
@@ -54,13 +54,13 @@ return s;
 		return wynik;
 	}
 
-	private static String getZnakPrzypisanyDoKodu(
-			HashMap<String, String> slownik2, String temp) {
+	private static String getZnakPrzypisanyDoKodu( String temp) {
 		for (String k : slownik.keySet()) {
 			if (slownik.get(k).equals(temp)) {
 				return k;
 			}
 		}
+		System.out.println("BYLEM NULL");
 		return null;
 
 	}

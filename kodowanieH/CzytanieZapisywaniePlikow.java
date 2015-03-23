@@ -31,8 +31,8 @@ System.out.println("wczytaneBajtyJakoString "+wczytaneBajtyJakoString);
 		} else {
 			wczytanyTekst = wczytaneBajtyJakoString;
 		}
-		// System.out.println("Liczba bitow przed kodowaniem = "+
-		// wczytanyTekst.length());
+//		 System.out.println("Liczba bitow przed kodowaniem = "+
+//		 wczytanyTekst.length());
 		liczbaBitowPrzedKodowaniem = wczytanyTekst.length();
 
 		int resultLength = wczytanyTekst.length() / 8;

@@ -12,6 +12,7 @@ import lista1_2.Czestotliwosc;
 public class MainKH {
 
 	public static void main(String[] args) {
+		int liczbaBitowPrzedKodowaniem=0;
 		// / 1. wczytuję tekst, 2. tworzę mapę 3.
 		ObliczeniaNaDanychZPliku obliczeniaNaDanychZPliku = new ObliczeniaNaDanychZPliku();
 	//	String nazwaPliku = "plik1Lista3.txt";
@@ -27,11 +28,12 @@ public class MainKH {
 		czestotliwosc.zliczPowtarzajaceSieBajty(wczytaneBajty);
 		Map<String, Integer> czestotliwoscSymbolu = czestotliwosc.getAscii_LiczbaWyst();
 		String wczytanytekst =CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPliku) ;
+		liczbaBitowPrzedKodowaniem = wczytanytekst.length();
 		/***/
 		
 //		String wczytanytekst = CzytanieZapisywaniePlikow
 //				.czytanietekstuZPliku(nazwaPliku);
-//
+//liczbaBitowPrzedKodowaniem = CzytanieZapisywaniePlikow.getLiczbaBitowPrzedKodowaniem();
 //		Map<String, Integer> czestotliwoscSymbolu = obliczeniaNaDanychZPliku
 //				.zliczPowtarzajaceSieChary(wczytanytekst);
 		
@@ -84,7 +86,7 @@ public class MainKH {
        int srDlKodowania =  obliczeniaNaDanychZPliku.wyznaczSreniaDlugoscKodowania(czestotliwoscSymbolu,slownik);
        System.out.println("Srednia dl. kodowania = "+ srDlKodowania);
 		//stopien kompresji
-      double stKompresji =  obliczeniaNaDanychZPliku.wyznaczStopienKompresji(CzytanieZapisywaniePlikow.getLiczbaBitowPrzedKodowaniem(), zakodowanyT.length());
+      double stKompresji =  obliczeniaNaDanychZPliku.wyznaczStopienKompresji(liczbaBitowPrzedKodowaniem, zakodowanyT.length());
        System.out.println("Stopien kompresji = "+stKompresji );
 	}
 
