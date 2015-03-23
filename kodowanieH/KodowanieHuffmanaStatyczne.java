@@ -37,7 +37,7 @@ return s;
 		String pom = new String();
 		StringBuilder wynik = new StringBuilder();
 
-		for (long i = 0; i < zakodowanyTekst.length()/10000; i++) {
+		for (long i = 0; i < zakodowanyTekst.length(); i++) {
 			pom += zakodowanyTekst.charAt((int) i);
 			if (slownik.containsValue(pom)) {
 				if(getZnakPrzypisanyDoKodu( pom).equals(null)){
