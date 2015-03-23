@@ -90,11 +90,17 @@ public class MainKH {
 		byte[] skompresowanyTekst = huffman.kompresuj(zakodowanyT);
 		System.out.println("Tekst skompresowany na  " + skompresowanyTekst.length
 				+ " bajtach");
+		//zapis do pliku skompesowanego tekstu
+		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisSkompresowanegoTekstuDoPliku(skompresowanyTekst);
+		//deszyfrowane tekstu z pliku przy uzycia slownika
+		byte[] wczytaneBajtyZZakodowanegoPliku = CzytanieZapisywaniePlikow.czytanieBajtowZPliku(nazwaPlikuWyjsciowego);
+		KodowanieHuffmanaStatyczne.dekompresjaPrzyUzyciuSlownika(wczytaneBajtyZZakodowanegoPliku);
 		
 		
 //		System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
 	
 //		//zapisz do pliku zakodowany tekst
+		
 //		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisywanieTekstuDoPliku(zakodowanyT);
 //
 //		//deszyfrowane tekstu z pliku przy uzycia slownika 

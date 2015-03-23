@@ -17,7 +17,6 @@ import java.util.Map;
 public class CzytanieZapisywaniePlikow {
 
 	private static int liczbaBitowPrzedKodowaniem;
-	
 
 	protected static String czytanietekstuZPliku(String nazwaPliku) {
 
@@ -200,8 +199,9 @@ public class CzytanieZapisywaniePlikow {
 		return readedBytes;
 
 	}
-	
-	public static Map<Byte, Integer> zliczPowtarzajaceSieBajty(byte[] wcztaneBajty) {
+
+	public static Map<Byte, Integer> zliczPowtarzajaceSieBajty(
+			byte[] wcztaneBajty) {
 		Map<Byte, Integer> bajt_LiczbaWyst = new HashMap<Byte, Integer>();
 
 		for (byte x : wcztaneBajty) {// wczytuje po bajcie
@@ -213,5 +213,23 @@ public class CzytanieZapisywaniePlikow {
 			}
 		}
 		return bajt_LiczbaWyst;
+	}
+
+	public static String zapisSkompresowanegoTekstuDoPliku(
+			byte[] skompresowanyTekst) {
+		String nazwaPliku = "plikWyjsciowy.txt";
+
+		BufferedOutputStream bos = null;
+		try {
+			FileOutputStream fs = new FileOutputStream(new File(nazwaPliku));
+			bos = new BufferedOutputStream(fs);
+			bos.write(skompresowanyTekst);
+			bos.close();
+			bos = null;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nazwaPliku;
 	}
 }
