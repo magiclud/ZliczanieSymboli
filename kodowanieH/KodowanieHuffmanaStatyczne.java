@@ -194,8 +194,8 @@ public class KodowanieHuffmanaStatyczne {
 
 			// zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
 		}
-		System.out.println("WczytaneBajtyZPliku 0: " + wczytaneBajtyZPliku[0]
-				+ ", zakodujTekst " + slownik.get(wczytaneBajtyZPliku[0]));
+		// System.out.println("WczytaneBajtyZPliku 0: " + wczytaneBajtyZPliku[0]
+		// + ", zakodujTekst " + slownik.get(wczytaneBajtyZPliku[0]));
 		return s;
 		// return zakodowanyTekst;
 	}
@@ -214,7 +214,7 @@ public class KodowanieHuffmanaStatyczne {
 
 	public byte[] kompresuj(StringBuilder zakodowanyT) {
 		String a = new String(zakodowanyT);
-		System.out.println("Zakodowany 0: " + a.charAt(0));
+		// System.out.println("Zakodowany 0: " + a.charAt(0));
 		StringBuilder tekstDoKompresji = new StringBuilder();
 		tekstDoKompresji = zakodowanyT;
 		byte[] resultByte;
@@ -249,60 +249,54 @@ public class KodowanieHuffmanaStatyczne {
 			}
 		}
 		dlTekstuZakodowanego = resultLength;
-		System.out.println("Result byte 0: " + resultByte[0]
-				+ ", Result byte 1: " + resultByte[1]);
+		// System.out.println("Result byte 0: " + resultByte[0]
+		// + ", Result byte 1: " + resultByte[1]);
 		return resultByte;
 	}
 
-	public static ArrayList<Byte> dekompresjaPrzyUzyciuSlownika(byte[] zakodowanyTekst) {
-		String pom = new String();
+	public static ArrayList<Byte> dekompresjaPrzyUzyciuSlownika(
+			byte[] zakodowanyTekst) {
+		StringBuffer pom = new StringBuffer();
 		ArrayList<Byte> wynik = new ArrayList<Byte>();
-//		System.out.println("zakodowanyTekst 0: " + zakodowanyTekst[0]
-//				+ ", zakodowanyTekst 0: " + zakodowanyTekst[1]);
-//
+		// System.out.println("zakodowanyTekst 0: " + zakodowanyTekst[0]
+		// + ", zakodowanyTekst 0: " + zakodowanyTekst[1]);
+		//
 		String bity = "";
 		for (int i = 0; i < zakodowanyTekst.length; i++) {
 			byte x = zakodowanyTekst[i];
 			// System.out.println(System.out.println(Integer.toBinaryString(fromByte(x)));
 			for (int k = 0; k < 8; k++) {
-//				System.out.println("Bit" + k + ": " + ((x >> k) & 1));
+				// System.out.println("Bit" + k + ": " + ((x >> k) & 1));
 				bity += ((x >> k) & 1);
-
 			}
 			bity = new StringBuffer(bity).reverse().toString();
+			pom.append(bity);
+			// if (slownik.containsValue(bity)) {
+			// System.out.println("it: "+ i+", wynik "+ wynik);
+			// wynik.add(getZnakPrzypisanyDoKodu(bity));
+			// bity = "";
+			// }
+		}
+		bity = "";
+		for (int j = 0; j < pom.length(); j++) {
+			bity += pom.charAt(j);
 			if (slownik.containsValue(bity)) {
 				// System.out.println("it: "+ i+", wynik "+ wynik);
 				wynik.add(getZnakPrzypisanyDoKodu(bity));
 				bity = "";
 			}
 		}
-//		System.out.println("Bity " + bity);
-//		byte[] byteArray = new byte[wynik.size()];
-//		for(int i =0; i<wynik.size(); i++){
-//			byteArray[i]=wynik.get(i);
-//		}
-//		String s = new String(byteArray);
-//		System.out.println("WYNIK: "+ s);
+		// System.out.println("Bity " + bity);
+		// byte[] byteArray = new byte[wynik.size()];
+		// for(int i =0; i<wynik.size(); i++){
+		// byteArray[i]=wynik.get(i);
+		// }
+		// String s = new String(byteArray);
+		// System.out.println("WYNIK: "+ s);
 		return wynik;
-		
+
 	}
 
-	// System.out.println("x "+ x + ", string value "+ new
-	// String(x.getBytes()));
-	// pom += new String(zakodowanyTekst[i]);
-	// if (slownik.containsValue(pom)) {
-	// if (getZnakPrzypisanyDoKodu(pom) == -1) {
-	// System.out.println("Byl null!!");
-	// }
-	// // System.out.println("it: "+ i+", wynik "+ wynik);
-	// wynik.append(getZnakPrzypisanyDoKodu(pom));
-	// pom = new String();
-	// }
-	// }
-	// System.out.println(wynik.length());
-	// // return wynik;
-	//
-	// }
 	public static BitSet fromByte(byte b) {
 		BitSet bits = new BitSet(8);
 		for (int i = 0; i < 8; i++) {
