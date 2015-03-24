@@ -16,19 +16,19 @@ public class MainKH {
 		// / 1. wczytuję tekst, 2. tworzę mapę 3.
 		ObliczeniaNaDanychZPliku obliczeniaNaDanychZPliku = new ObliczeniaNaDanychZPliku();
 		KodowanieHuffmanaStatyczne huffman = new KodowanieHuffmanaStatyczne();
-	//	String nazwaPliku = "plik1Lista3.txt";
+		String nazwaPliku = "plik1Lista3.txt";
 
 		/**
 		 * dla inych plikow - zwyklych tekstowych 
 		 * 
 		 * **/
-		String nazwaPliku = "PanTadeusz.txt";
-	//	String nazwaPliku = "test1.txt";
+	//	String nazwaPliku = "PanTadeusz.txt";
+//		String nazwaPliku = "test1.txt";
 		Czestotliwosc czestotliwosc = new Czestotliwosc(nazwaPliku);
 		File file =new File(nazwaPliku);
-		int[] wczytaneBajty = czestotliwosc.czestostliowscBajtowInnychPlikow(file);
-		czestotliwosc.zliczPowtarzajaceSieBajty(wczytaneBajty);
-		Map<Integer, Integer> czestotliwoscSymbolu = czestotliwosc.getBajt_LiczbaWyst();
+		//int[] wczytaneBajty = czestotliwosc.czestostliowscBajtowInnychPlikow(file);
+	//	czestotliwosc.zliczPowtarzajaceSieBajty(wczytaneBajty);
+	//	Map<Integer, Integer> czestotliwoscSymbolu = czestotliwosc.getBajt_LiczbaWyst();
 //		String wczytanytekst =CzytanieZapisywaniePlikow.wczytajStringZPliku(nazwaPliku) ;
 //		liczbaBitowPrzedKodowaniem = wczytanytekst.length();
 		/***/
@@ -94,8 +94,8 @@ public class MainKH {
 		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisSkompresowanegoTekstuDoPliku(skompresowanyTekst);
 		//deszyfrowane tekstu z pliku przy uzycia slownika
 		byte[] wczytaneBajtyZZakodowanegoPliku = CzytanieZapisywaniePlikow.czytanieBajtowZPliku(nazwaPlikuWyjsciowego);
-		StringBuilder odkodowanyTekst = KodowanieHuffmanaStatyczne.dekompresjaPrzyUzyciuSlownika(wczytaneBajtyZZakodowanegoPliku);
-		 System.out.println("Oryginalny tekst składał się z " + odkodowanyTekst.length() + " znaków");
+		ArrayList<Byte> odkodowanyTekst = KodowanieHuffmanaStatyczne.dekompresjaPrzyUzyciuSlownika(wczytaneBajtyZZakodowanegoPliku);
+		 System.out.println("Oryginalny tekst składał się z " + odkodowanyTekst.size() + " znaków");
 		 System.out.println("Odkodowany tekst to: \n " + odkodowanyTekst);
 	
 //		//zapisz do pliku zakodowany tekst

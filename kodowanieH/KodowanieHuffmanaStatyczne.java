@@ -255,20 +255,27 @@ public class KodowanieHuffmanaStatyczne {
 		return resultByte;
 	}
 
-	public static StringBuilder dekompresjaPrzyUzyciuSlownika(
+	public static ArrayList<Byte> dekompresjaPrzyUzyciuSlownika(
 			byte[] zakodowanyTekst) {
 		StringBuilder pom = new StringBuilder();
 		ArrayList<Byte> wynik = new ArrayList<Byte>();
 		StringBuilder trescOdkodowana = new StringBuilder();
 
-		int[] wartoscDec = new int[zakodowanyTekst.length];
+		String bity="";
+		for (int i = 0; i < zakodowanyTekst.length; i++) {
+			byte x = zakodowanyTekst[i];
+ 			for (int k = 0; k < 8; k++) {
+		// System.out.println("Bit" + k + ": " + ((x >> k) & 1));
+ 				bity += ((x >> k) & 1);
 
-		for (int i = 0; i < wartoscDec.length; i++) {
-			wartoscDec[i] = zakodowanyTekst[i] & 0xFF;
-			pom.append(Integer.toString(wartoscDec[i], 2));
+ 			}
+ 			bity = new StringBuffer(bity).reverse().toString();
+ 			System.out.println("Bit" + bity );
+
+			pom.append(bity);
+			bity="";
 		}
 
-		String bity = "";
 		for (int j = 0; j < pom.length(); j++) {
 			bity += pom.charAt(j);
 			if (slownik.containsValue(bity)) {
@@ -279,7 +286,7 @@ public class KodowanieHuffmanaStatyczne {
 				bity = "";
 			}
 		}
-		// System.out.println("Tresc "+ trescOdkodowana.toString());
-		return trescOdkodowana;
+		 System.out.println("Tresc "+ trescOdkodowana.toString());
+		return wynik;
 	}
 }
