@@ -17,7 +17,6 @@ public class KodowanieHuffmanaStatyczne {
 
 	private static HashMap<Byte, String> slownik;
 	private static HashMap<String, Byte> codeToChar;
-	private static int dlTekstuZakodowanego = 0;
 
 	// This method assumes that the tree and dictionary are already built
 	protected StringBuilder zakodujTekst(String tekstDoZakodowania) {
@@ -248,10 +247,6 @@ public class KodowanieHuffmanaStatyczne {
 				resultByte[i] = (byte) result[i];
 			}
 		}
-		dlTekstuZakodowanego = resultLength;
-
-		// System.out.println("Result byte 0: " + resultByte[0]
-		// + ", Result byte 1: " + resultByte[1]);
 		return resultByte;
 	}
 
@@ -270,7 +265,7 @@ public class KodowanieHuffmanaStatyczne {
 
  			}
  			bity = new StringBuffer(bity).reverse().toString();
- 			System.out.println("Bit" + bity );
+ 		//	System.out.println("Bit" + bity );
 
 			pom.append(bity);
 			bity="";
@@ -286,7 +281,7 @@ public class KodowanieHuffmanaStatyczne {
 				bity = "";
 			}
 		}
-		 System.out.println("Tresc "+ trescOdkodowana.toString());
+		// System.out.println("Tresc "+ trescOdkodowana.toString());
 		return wynik;
 	}
 }
