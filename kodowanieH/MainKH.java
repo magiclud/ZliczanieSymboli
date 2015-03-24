@@ -15,11 +15,11 @@ public class MainKH {
 		int liczbaBitowPrzedKodowaniem = 0;
 		ObliczeniaNaDanychZPliku obliczeniaNaDanychZPliku = new ObliczeniaNaDanychZPliku();
 		KodowanieHuffmanaStatyczne huffman = new KodowanieHuffmanaStatyczne();
-	
-		 String nazwaPliku = "plik1Lista3.txt";
-	//	String nazwaPliku = "PanTadeusz.txt";
+
+		String nazwaPliku = "plik1Lista3.txt";
+		// String nazwaPliku = "PanTadeusz.txt";
 		// String nazwaPliku = "test1.txt";
-		 
+
 		Czestotliwosc czestotliwosc = new Czestotliwosc(nazwaPliku);
 		File file = new File(nazwaPliku);
 
@@ -47,7 +47,7 @@ public class MainKH {
 
 		// tworzenie tabel do kodowania i odkodowania - slownik
 		huffman.zbudujTabeleKodow(korzen);
-		HashMap<Byte, String> slownik = KodowanieHuffmanaStatyczne.getSlownik();
+		HashMap<Byte, String> slownik = huffman.getSlownik();
 		System.out.println("Wyswietl slownik");
 		wyswietlHashMape(slownik);
 
@@ -66,7 +66,7 @@ public class MainKH {
 		// deszyfrowane tekstu z pliku przy uzycia slownika
 		byte[] wczytaneBajtyZZakodowanegoPliku = CzytanieZapisywaniePlikow
 				.czytanieBajtowZPliku(nazwaPlikuWyjsciowego);
-		ArrayList<Byte> odkodowanyTekst = KodowanieHuffmanaStatyczne
+		ArrayList<Byte> odkodowanyTekst = huffman
 				.dekompresjaPrzyUzyciuSlownika(wczytaneBajtyZZakodowanegoPliku);
 		System.out.println("Oryginalny tekst składał się z "
 				+ odkodowanyTekst.size() + " znaków");
@@ -77,16 +77,15 @@ public class MainKH {
 		double entropia = obliczeniaNaDanychZPliku
 				.entropiaDlaPojedynczychBajtow(wczytaneBajtyZPliku,
 						czestotliwoscBytow);
-		 System.out.println("Entropia: "+entropia);
-		 //srednia dlugosc kodowania
-		 int srDlKodowania =
-		 obliczeniaNaDanychZPliku.wyznaczSreniaDlugoscKodowania(czestotliwoscBytow,slownik);
-		 System.out.println("Srednia dl. kodowania = "+ srDlKodowania);
+		System.out.println("Entropia: " + entropia);
+		// srednia dlugosc kodowania
+		int srDlKodowania = obliczeniaNaDanychZPliku
+				.wyznaczSreniaDlugoscKodowania(czestotliwoscBytow, slownik);
+		System.out.println("Srednia dl. kodowania = " + srDlKodowania);
 		// stopien kompresji
-		 double stKompresji =
-		 obliczeniaNaDanychZPliku.wyznaczStopienKompresji(wczytaneBajtyZPliku.length,
-				 skompresowanyTekst.length);
-		 System.out.println("Stopien kompresji = "+stKompresji );
+		double stKompresji = obliczeniaNaDanychZPliku.wyznaczStopienKompresji(
+				wczytaneBajtyZPliku.length, skompresowanyTekst.length);
+		System.out.println("Stopien kompresji = " + stKompresji);
 	}
 
 	public static void wyswietlHashMape(Map result) {

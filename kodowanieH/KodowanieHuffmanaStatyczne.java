@@ -16,80 +16,18 @@ import java.util.Map.Entry;
 public class KodowanieHuffmanaStatyczne {
 
 	private static HashMap<Byte, String> slownik;
-	private static HashMap<String, Byte> codeToChar;
 
-	// This method assumes that the tree and dictionary are already built
-	protected StringBuilder zakodujTekst(String tekstDoZakodowania) {
-		StringBuilder s = new StringBuilder();
-		// String zakodowanyTekst = new String();
+	protected ArrayList<Wezel> tworzPosortowanaListeBytow(
+			Map<Byte, Integer> czestotliwoscBytow) {
 
-		for (int i = 0; i < tekstDoZakodowania.length(); i++) {
-			String pom = String.valueOf(tekstDoZakodowania.charAt(i));
-			s.append(slownik.get(pom));
-			// zakodowanyTekst = zakodowanyTekst + slownik.get(pom);
+		ArrayList<Wezel> listaWezlow = new ArrayList<Wezel>();
+		Set<Entry<Byte, Integer>> hashSet = czestotliwoscBytow.entrySet();
+		for (Entry<Byte, Integer> entry : hashSet) {
+			listaWezlow.add(new Wezel(entry.getKey(), entry.getValue()));
 		}
-		return s;
-		// return zakodowanyTekst;
+		listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
+		return listaWezlow;
 	}
-
-	// This method assumes that the tree and dictionary are already built
-	public static StringBuilder dekompresjaTekstuPrzyUzyciuSlownika(
-			StringBuilder zakodowanyTekst) {
-		String pom = new String();
-		StringBuilder wynik = new StringBuilder();
-
-		for (long i = 0; i < zakodowanyTekst.length(); i++) {
-			pom += zakodowanyTekst.charAt((int) i);
-			if (slownik.containsValue(pom)) {
-				if (getZnakPrzypisanyDoKodu(pom) == -1) {
-					System.out.println("Byl null!!");
-				}
-				// System.out.println("it: "+ i+", wynik "+ wynik);
-				wynik.append(getZnakPrzypisanyDoKodu(pom));
-				pom = new String();
-			}
-		}
-		System.out.println(wynik.length());
-		return wynik;
-	}
-
-	private static Byte getZnakPrzypisanyDoKodu(String temp) {
-		for (Byte k : slownik.keySet()) {
-			if (slownik.get(k).equals(temp)) {
-				return k;
-			}
-		}
-		return 0;
-
-	}
-
-	protected void wyswietlKodyZnakow(int i, ArrayList<Wezel> drzewoHuffmana,
-			String kod) {
-		// Wezel pierwszyE = drzewoHuffmana.get(0);
-		// for (Wezel wezel : listaWezlow) {
-		// if( pierwszyE.g.getWartosc().equals(wezel.getWartosc())){
-		//
-		// }
-		// }
-
-		if (drzewoHuffmana.get(i).getLewyPotomek() == null) {
-			System.out.println(drzewoHuffmana.get(i).getWartosc() + "  " + kod);
-		} else {
-			wyswietlKodyZnakow(i + 1, drzewoHuffmana, kod + "0");
-			// wyswietlKodyZnakow(i+1, drzewoHuffmana, kod + "0");
-		}
-	}
-
-	// protected ArrayList<Wezel> tworzPosortowanaListeWezlow(
-	// Map<Integer, Integer> czestotliwoscSymbolu) {
-	// ArrayList<Wezel> listaWezlow = new ArrayList<Wezel>();
-	// Set<Entry<Integer, Integer>> hashSet = czestotliwoscSymbolu.entrySet();
-	// for (Entry<Integer, Integer> entry : hashSet) {
-	// listaWezlow.add(new Wezel(entry.getKey(), entry.getValue()));
-	// }
-	// listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
-	// return listaWezlow;
-	// }
 
 	protected ArrayList<Wezel> sortowanieElementowWLiscieWezlow(
 			ArrayList<Wezel> listaW) {
@@ -130,8 +68,6 @@ public class KodowanieHuffmanaStatyczne {
 	// Stwórz slownik(tablice) do zakodowania i odkodowania
 	protected void zbudujTabeleKodow(Wezel root) {
 		slownik = new HashMap<Byte, String>();
-		codeToChar = new HashMap<String, Byte>();
-
 		postorder(root, new String());
 	}
 
@@ -145,45 +81,13 @@ public class KodowanieHuffmanaStatyczne {
 
 		byte wartosc = n.getWartosc();
 		if (wartosc != 0) {
-			// tylko gdy w lisciu sa waertosci (litery)
+			// tylko gdy w lisciu sa wartosci (litery)
 			System.out.println("\'" + wartosc + "\' -> " + s);
 			slownik.put(wartosc, s);
-			codeToChar.put(s, wartosc);
 		}
-
 	}
 
-	protected Map<String, Integer> sortByValue(Map<String, Integer> map) {
-		List<Integer> list = new LinkedList<Integer>();
-		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				return ((Comparable) ((Map.Entry) (o1)).getValue())
-						.compareTo(((Map.Entry) (o2)).getValue());
-			}
-		});
-		Map<String, Integer> result = new LinkedHashMap<String, Integer>();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) it
-					.next();
-			result.put(entry.getKey(), entry.getValue());
-		}
-		System.out.println("*****************************");
-		Set<Entry<String, Integer>> hashSet = result.entrySet();
-		for (Entry<String, Integer> entry : hashSet) {
-			// String ascii = String.valueOf(Character.toChars((int)
-			// entry.getKey()));
-			System.out.println("Key=" + entry.getKey()
-					+ ", Czestosc wystepowania=" + entry.getValue());
-		}
-
-		return result;
-	}
-
-	public static HashMap<Byte, String> getSlownik() {
-		return slownik;
-	}
-
-	public StringBuilder zakodujTekstByte(byte[] wczytaneBajtyZPliku) {
+	protected StringBuilder zakodujTekstByte(byte[] wczytaneBajtyZPliku) {
 		StringBuilder s = new StringBuilder();
 		// String zakodowanyTekst = new String();
 
@@ -199,19 +103,7 @@ public class KodowanieHuffmanaStatyczne {
 		// return zakodowanyTekst;
 	}
 
-	public ArrayList<Wezel> tworzPosortowanaListeBytow(
-			Map<Byte, Integer> czestotliwoscBytow) {
-
-		ArrayList<Wezel> listaWezlow = new ArrayList<Wezel>();
-		Set<Entry<Byte, Integer>> hashSet = czestotliwoscBytow.entrySet();
-		for (Entry<Byte, Integer> entry : hashSet) {
-			listaWezlow.add(new Wezel(entry.getKey(), entry.getValue()));
-		}
-		listaWezlow = sortowanieElementowWLiscieWezlow(listaWezlow);
-		return listaWezlow;
-	}
-
-	public byte[] kompresuj(StringBuilder zakodowanyT) {
+	protected byte[] kompresuj(StringBuilder zakodowanyT) {
 		String a = new String(zakodowanyT);
 		// System.out.println("Zakodowany 0: " + a.charAt(0));
 
@@ -250,25 +142,25 @@ public class KodowanieHuffmanaStatyczne {
 		return resultByte;
 	}
 
-	public static ArrayList<Byte> dekompresjaPrzyUzyciuSlownika(
+	protected ArrayList<Byte> dekompresjaPrzyUzyciuSlownika(
 			byte[] zakodowanyTekst) {
 		StringBuilder pom = new StringBuilder();
 		ArrayList<Byte> wynik = new ArrayList<Byte>();
 		StringBuilder trescOdkodowana = new StringBuilder();
 
-		String bity="";
+		String bity = "";
 		for (int i = 0; i < zakodowanyTekst.length; i++) {
 			byte x = zakodowanyTekst[i];
- 			for (int k = 0; k < 8; k++) {
-		// System.out.println("Bit" + k + ": " + ((x >> k) & 1));
- 				bity += ((x >> k) & 1);
+			for (int k = 0; k < 8; k++) {
+				// System.out.println("Bit" + k + ": " + ((x >> k) & 1));
+				bity += ((x >> k) & 1);
 
- 			}
- 			bity = new StringBuffer(bity).reverse().toString();
- 		//	System.out.println("Bit" + bity );
+			}
+			bity = new StringBuffer(bity).reverse().toString();
+			// System.out.println("Bit" + bity );
 
 			pom.append(bity);
-			bity="";
+			bity = "";
 		}
 
 		for (int j = 0; j < pom.length(); j++) {
@@ -284,4 +176,28 @@ public class KodowanieHuffmanaStatyczne {
 		// System.out.println("Tresc "+ trescOdkodowana.toString());
 		return wynik;
 	}
+
+	private Byte getZnakPrzypisanyDoKodu(String temp) {
+		for (Byte k : slownik.keySet()) {
+			if (slownik.get(k).equals(temp)) {
+				return k;
+			}
+		}
+		return 0;
+	}
+
+	protected void wyswietlKodyZnakow(int i, ArrayList<Wezel> drzewoHuffmana,
+			String kod) {
+
+		if (drzewoHuffmana.get(i).getLewyPotomek() == null) {
+			System.out.println(drzewoHuffmana.get(i).getWartosc() + "  " + kod);
+		} else {
+			wyswietlKodyZnakow(i + 1, drzewoHuffmana, kod + "0");
+		}
+	}
+
+	public HashMap<Byte, String> getSlownik() {
+		return slownik;
+	}
+
 }
