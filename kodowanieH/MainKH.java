@@ -22,8 +22,8 @@ public class MainKH {
 		 * dla inych plikow - zwyklych tekstowych 
 		 * 
 		 * **/
-	//	String nazwaPliku = "PanTadeusz.txt";
-		String nazwaPliku = "test1.txt";
+		String nazwaPliku = "PanTadeusz.txt";
+	//	String nazwaPliku = "test1.txt";
 		Czestotliwosc czestotliwosc = new Czestotliwosc(nazwaPliku);
 		File file =new File(nazwaPliku);
 		int[] wczytaneBajty = czestotliwosc.czestostliowscBajtowInnychPlikow(file);
@@ -94,10 +94,9 @@ public class MainKH {
 		String nazwaPlikuWyjsciowego = CzytanieZapisywaniePlikow.zapisSkompresowanegoTekstuDoPliku(skompresowanyTekst);
 		//deszyfrowane tekstu z pliku przy uzycia slownika
 		byte[] wczytaneBajtyZZakodowanegoPliku = CzytanieZapisywaniePlikow.czytanieBajtowZPliku(nazwaPlikuWyjsciowego);
-		ArrayList<Byte> odkodowaneBajty = KodowanieHuffmanaStatyczne.dekompresjaPrzyUzyciuSlownika(wczytaneBajtyZZakodowanegoPliku);
-		 System.out.println("Oryginalny tekst składał się z " + odkodowaneBajty.size() + " znaków");
-		
-//		System.out.println("Zakodowany tekst to: \n " + zakodowanyT);
+		StringBuilder odkodowanyTekst = KodowanieHuffmanaStatyczne.dekompresjaPrzyUzyciuSlownika(wczytaneBajtyZZakodowanegoPliku);
+		 System.out.println("Oryginalny tekst składał się z " + odkodowanyTekst.length() + " znaków");
+		 System.out.println("Odkodowany tekst to: \n " + odkodowanyTekst);
 	
 //		//zapisz do pliku zakodowany tekst
 		
